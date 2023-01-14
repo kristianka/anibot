@@ -29,7 +29,7 @@ DEV_CHANNEL_ID= "xx" // test channel for /slash commands
     "Vinland Saga S2",
     "Mobile Suit Gundam - The Witch from Mercury",
 ]
-
+```
 - In repository run node index.js.
 
 - Done!
