@@ -32,10 +32,10 @@ module.exports = async function execute(type, i) {
         const timezone = "Europe/Helsinki"
         const timeFormat = "en-FI";
         const pubDayTime = JSON.stringify(jsonData.rss.channel.item[i].pubDate);
-        const currentTime = () => new Date().toLocaleTimeString(timeFormat, { timeZone: timezone });
+        const currentLocalTime = () => new Date().toLocaleTimeString(timeFormat, { timeZone: timezone });
         const toLocateDate = (date) => new Date(date).toLocaleDateString(timeFormat, { timeZone: timezone, weekday: "short" });
         const toLocaleTime = (date) => new Date(date).toLocaleTimeString(timeFormat, { timeZone: timezone, hour: "2-digit", minute: "2-digit", second: "2-digit" });
-        const dateArray = [toLocateDate(pubDayTime), toLocaleTime(pubDayTime), currentTime()];
+        const dateArray = [toLocateDate(pubDayTime), toLocaleTime(pubDayTime), currentLocalTime()];
         return dateArray;
     }
 

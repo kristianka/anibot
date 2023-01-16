@@ -2,6 +2,7 @@
 const fetchFromAPI = require('./fetchAPI.js');
 const index = require("../index.js");
 const fs = require('fs');
+require('dotenv').config()
 
 const path = require('path');
 const dataDirectory = path.join(__dirname, '../data/data.json')
@@ -10,17 +11,15 @@ const showsDirectory = path.join(__dirname, '../data/shows.json')
 
 module.exports.watching = async function execute() {
     {
-        require('dotenv').config()
         try {
             const bot = index.Gbot;
-            // get current time on local timezone
-            const currentTime = () => new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
             const channel = bot.channels.cache.get(process.env.RELEASE_CHANNEL_ID);
             const max = 3;
             for (let i = 0; i < max; i++) {
 
-                let showName = await fetchFromAPI('name', i);
-                let pubTime = await fetchFromAPI('time', i);
+                const showName = await fetchFromAPI('name', i);
+                const pubTimes = await fetchFromAPI('time', i);
+                // pubTimes[0] is toLocateDate, [1] is toLocaleTime, [2] is currentLocalTime
 
                 // If a batch release then skip and add one to max amount fetched shows
                 if (showName.includes("[Batch]")) {
@@ -37,7 +36,8 @@ module.exports.watching = async function execute() {
                         if (err) throw err;
                     }));
 
-                    const following = shows.some(e => e === showName);
+                    const showNameWOEpisode = showName.slice(0, -5);
+                    const following = shows.some(e => e === showNameWOEpisode);
 
                     if (following) {
 
@@ -47,8 +47,8 @@ module.exports.watching = async function execute() {
 
                         if (!alreadyFetched) {
 
-                            console.log("Sending", showName, "to chat at", currentTime())
-                            channel.send('NEW RELEASE: ' + showName + ' at ' + pubTime);
+                            console.log("Sending", showName, "to chat at", pubTimes[2]);
+                            channel.send('NEW RELEASE: ' + showName + ' at ' + pubTimes[1]);
                             fs.readFile(dataDirectory, function (err, data) {
                                 if (err) throw err;
                                 const json = JSON.parse(data);
@@ -63,7 +63,7 @@ module.exports.watching = async function execute() {
                             console.log(showName, "has been already fetched!");
                         }
                     } else {
-                        console.log("No new episodes! Latest show was", showName, "Finished at", currentTime());
+                        console.log("No new episodes! Latest show was", showName, "Finished at", pubTimes[2]);
                     }
                 }
             }
