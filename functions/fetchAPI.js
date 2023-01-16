@@ -21,16 +21,22 @@ module.exports = async function execute(type, i) {
     if (type === 'name') {
         let showName = JSON.stringify(jsonData.rss.channel.item[i].title);
         // Clean up the name and timestrings
-        showName = showName.slice(0, -29);
-        showName = showName.slice(14);
         showName = showName.toString();
+        showName = showName.slice(0, -24);
+        showName = showName.slice(14);
         return showName;
     }
 
     else if (type === 'time') {
-        let pubTime = JSON.stringify(jsonData.rss.channel.item[i].pubDate);
-        const toLocalTime = (time) => new Date(time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-        return toLocalTime(pubTime);
+        // change these to your local ones
+        const timezone = "Europe/Helsinki"
+        const timeFormat = "en-FI";
+        const pubDayTime = JSON.stringify(jsonData.rss.channel.item[i].pubDate);
+        const currentTime = () => new Date().toLocaleTimeString(timeFormat, { timeZone: timezone });
+        const toLocateDate = (date) => new Date(date).toLocaleDateString(timeFormat, { timeZone: timezone, weekday: "short" });
+        const toLocaleTime = (date) => new Date(date).toLocaleTimeString(timeFormat, { timeZone: timezone, hour: "2-digit", minute: "2-digit", second: "2-digit" });
+        const dateArray = [toLocateDate(pubDayTime), toLocaleTime(pubDayTime), currentTime()];
+        return dateArray;
     }
 
 }

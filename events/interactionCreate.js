@@ -12,8 +12,10 @@ module.exports = {
 
         try {
             await command.execute(interaction);
-            const date = new Date().toLocaleString();
-            console.log("User", interaction.user.username, "ran /" + interaction.commandName, "at", date);
+            const timezone = "Europe/Helsinki"
+            const timeFormat = "en-FI";
+            const currentTime = () => new Date().toLocaleTimeString(timeFormat, { timeZone: timezone, hour: "2-digit", minute: "2-digit", second: "2-digit" });
+            console.log("User", interaction.user.username, "ran /" + interaction.commandName, "at", currentTime());
         } catch (error) {
             console.error(`Error executing ${interaction.commandName}`);
             console.error(error);

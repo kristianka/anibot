@@ -1,5 +1,5 @@
-const fs = require('node:fs');
-const path = require('node:path');
+const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const resetData = require('./functions/resetData');
@@ -13,6 +13,7 @@ const client = new Client({
     ],
 });
 
+// fetch all the commands from /commands/ folder
 client.commands = new Collection();
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
@@ -23,7 +24,7 @@ for (const file of commandFiles) {
     client.commands.set(command.data.name, command);
 }
 
-
+// fetch all the events from /events/ folder
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
@@ -37,8 +38,7 @@ for (const file of eventFiles) {
     }
 }
 
-module.exports.Gbot = client;
-
+// fetch shows every 5 minutes
 function fetchShows() {
     setTimeout(() => {
         watching.watching();
@@ -49,6 +49,5 @@ function fetchShows() {
 fetchShows();
 // reset list of fetched shows every 24 hours
 setInterval(resetData.reset, 1000 * 60 * 60 * 24);
-
 client.login(process.env.DISCORD_TOKEN);
-
+module.exports.Gbot = client;
