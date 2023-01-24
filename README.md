@@ -34,7 +34,49 @@ DEV_CHANNEL_ID= "xx" // test channel for /slash commands
 
 - Done!
 
-**Note!** Make sure to type names correctly, use [rōmaji](https://en.wikipedia.org/wiki/Romanization_of_Japanese) version of names. SubsPlease shortens seasons in title, like "Season 2" to "S2". If you are unsure, you can check their [RSS feed](https://subsplease.org/rss/?t&r=1080) for correct spelling.
+**Note!** Make sure to type names correctly, use [rōmaji](https://en.wikipedia.org/wiki/Romanization_of_Japanese) version of names. Season in title are shortened, like "Season 2" to "S2".
+
+## Screenshots
+
+<details>
+<summary>Click to see screenshots</summary>
+<br>
+
+Bot sending notification of a new release. Runs every five minutes automatically in the background.
+
+<img width="706" alt="Picture of the bot sending a new release message" src="https://user-images.githubusercontent.com/49764796/214304019-fd82a0da-1bf3-453d-8d50-f2b7e80fded2.png">
+
+<br>
+
+```/latest``` command which responds with ten latest releases
+
+<img width="702" alt="image" src="https://user-images.githubusercontent.com/49764796/214304300-fdc3d33e-5536-4d1d-8492-1f47c29b71c4.png">
+</details>
+
+## FAQ
+
+- [My timezone or time formatting is wrong!](#my-timezone-or-time-formatting-is-wrong)
+- [The bot doesn't work!](#the-bot-doesnt-work)
 
 
-Suggestions? Create an [issue](https://github.com/kristianka/anibot/issues)!
+### My timezone or time formatting is wrong!
+
+Modify the these variables in ```fetchAPI.js``` to your liking:
+```
+const timezone = "Europe/Helsinki";
+const timeFormat = "en-FI";
+```
+
+### The bot doesn't work!
+
+Have you:
+- added your credentials to ```.env```
+- created a ```data``` folder where there are two files, ```shows.json``` and ```data.json```
+- added titles to ```shows.json``` and inserted ```[]``` to ```data.json```?
+
+If ```/latest``` works you might have invalid shows in ```shows.json```.
+
+
+## Suggestions
+Create an [issue](https://github.com/kristianka/anibot/issues)!
+Feel free to fork this and improve it or modify it to your liking.
