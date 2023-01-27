@@ -44,10 +44,10 @@ function fetchShows() {
         watching.watching();
         fetchShows();
     }, "300000");
-}
+};
 
 fetchShows();
-// reset list of fetched shows every 24 hours
-setInterval(resetData.reset, 1000 * 60 * 60 * 24);
+// reset list of fetched shows every 48 hours
+setInterval(resetData.reset, 1000 * 60 * 60 * 48);
 client.login(process.env.DISCORD_TOKEN);
 module.exports.Gbot = client;
