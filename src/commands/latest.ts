@@ -2,13 +2,14 @@
 /* eslint-disable no-console */
 "use strict";
 
-const fetchFromAPI = require("../functions/fetchAPI.js");
+import fetchFromAPI from "../functions/fetchAPI.js";
 
-const { SlashCommandBuilder } = require("discord.js");
+import { SlashCommandBuilder } from "discord.js";
 
-require("dotenv").config();
+import dotenv from 'dotenv'
+dotenv.config();
 
-module.exports = {
+export default {
     data: new SlashCommandBuilder()
         .setName("latest")
         .setDescription("Provides latest 10 releases."),

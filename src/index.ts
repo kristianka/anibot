@@ -1,15 +1,23 @@
 /* eslint-disable jsdoc/require-jsdoc */
 "use strict";
 
-const fs = require("fs");
-const path = require("path");
+import * as fs from 'fs';
+import * as path from 'path';
 
-require("dotenv").config({ path: "../.env" });
+import dotenv from 'dotenv'
+dotenv.config({ path: "../.env" });
 
-const { Client, Collection, GatewayIntentBits } = require("discord.js");
-const watching = require("./functions/watching.js");
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const client = new Client({
+import { Client, Collection, GatewayIntentBits } from "discord.js";
+import watching from "./functions/watching.js";
+
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+
+const client: any = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
@@ -20,28 +28,26 @@ const client = new Client({
 
 // fetch all the commands from /commands/ folder
 client.commands = new Collection();
+
 const commandsPath = path.join(__dirname, "commands");
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js"));
 
 for (const file of commandFiles) {
-    const filePath = path.join(commandsPath, file);
-    const command = require(filePath);
-
-    client.commands.set(command.data.name, command);
+    const command = await import(`file://${commandsPath}/${file}`);
+    client.commands.set(command.default.data.name, command);
 }
+
 
 // fetch all the events from /events/ folder
 const eventsPath = path.join(__dirname, "events");
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith(".js"));
 
 for (const file of eventFiles) {
-    const filePath = path.join(eventsPath, file);
-    const event = require(filePath);
-
-    if (event.once) {
-        client.once(event.name, (...args) => event.execute(...args));
+    const command = await import(`file://${eventsPath}/${file}`);
+    if (command.default.once) {
+        client.once(command.default.name, (...args) => command.default.execute(...args));
     } else {
-        client.on(event.name, (...args) => event.execute(...args));
+        client.on(command.default.name, (...args) => command.default.execute(...args));
     }
 }
 
@@ -57,4 +63,5 @@ fetchShows();
 
 client.login(process.env.DISCORD_TOKEN);
 
-module.exports.Gbot = client;
+// module.exports.Gbot = client;
+export default { Gbot: client };

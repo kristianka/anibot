@@ -2,7 +2,9 @@
     "compilerOptions": {
         "outDir": "./dist",
         "allowJs": true,
-        "target": "es5",
+        "target": "ESNext",
+        "moduleResolution": "nodenext",
+        "module": "EsNext",
         "noFallthroughCasesInSwitch": true,
     },
     "include": [

@@ -3,9 +3,9 @@
 /* eslint-disable no-console */
 "use strict";
 
-const parseString = require("xml2js").parseString;
+import { parseString } from "xml2js";
 
-module.exports = async function execute(type, i) {
+export default async function execute(type, i) {
     let jsonData = {};
 
     await fetch("https://subsplease.org/rss/?t&r=1080")

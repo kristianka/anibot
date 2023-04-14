@@ -2,14 +2,17 @@
 /* eslint-disable no-console */
 "use strict";
 
-module.exports = {
+import { Interaction } from "discord.js";
+
+export default {
     name: "interactionCreate",
+    once: false,
     async execute(interaction) {
         if (!interaction.isChatInputCommand()) {
             return;
         }
 
-        const command = interaction.client.commands.get(interaction.commandName);
+        const command = interaction.client.commands.get(interaction.commandName).default;
 
         if (!command) {
             console.error(`No command matching ${interaction.commandName} was found.`);
@@ -30,4 +33,5 @@ module.exports = {
             console.error(error);
         }
     }
+
 };

@@ -17,9 +17,11 @@
   },
   "devDependencies": {
     "@types/node": "^18.15.11",
+    "@types/xml2js": "^0.4.11",
     "eslint": "^8.38.0",
     "eslint-config-eslint": "^7.0.0",
     "nodemon": "^2.0.20",
     "typescript": "^5.0.4"
-  }
+  },
+  "type": "module"
 }

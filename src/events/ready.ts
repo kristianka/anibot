@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 "use strict";
 
-require("dotenv").config();
+import dotenv from 'dotenv';
+dotenv.config();
 
-module.exports = {
+export default {
     name: "ready",
     once: true,
     execute(client) {
@@ -12,4 +13,5 @@ module.exports = {
 
         channel.send("Online! ✅");
     }
+
 };

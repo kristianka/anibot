@@ -2,12 +2,13 @@
 /* eslint-disable brace-style */
 "use strict";
 
+import fetchFromAPI from "./fetchAPI.js";
+import index from "../index.js";
 
-const fetchFromAPI = require("./fetchAPI");
-const index = require("../index");
+import dotenv from 'dotenv';
+dotenv.config();
 
-require("dotenv").config();
-const mongodb = require("mongodb");
+import mongodb from "mongodb";
 
 const uri = process.env.DB_CONNECTION_STRING;
 
@@ -19,7 +20,7 @@ const mongoConnection = new mongodb.MongoClient(uri, {
     }
 });
 
-module.exports = async function execute() {
+export default async function execute() {
 
     try {
         const bot = index.Gbot;
