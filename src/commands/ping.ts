@@ -1,4 +1,3 @@
-"use strict";
 
 const { SlashCommandBuilder } = require("discord.js");
 

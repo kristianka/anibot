@@ -26,7 +26,7 @@ module.exports = async function execute(type, i) {
         });
 
     if (type === "name") {
-        let showName = JSON.stringify(jsonData.rss.channel.item[i].title);
+        let showName: any = JSON.stringify(jsonData.rss.channel.item[i].title);
 
         // Clean up the name and timestrings
         showName = showName.toString();

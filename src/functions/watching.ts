@@ -2,8 +2,9 @@
 /* eslint-disable brace-style */
 "use strict";
 
-const fetchFromAPI = require("./fetchAPI.js");
-const index = require("../index.js");
+
+const fetchFromAPI = require("./fetchAPI");
+const index = require("../index");
 
 require("dotenv").config();
 const mongodb = require("mongodb");
