@@ -26,7 +26,10 @@ module.exports = async function execute() {
         let max = 3;
 
         for (let i = 0; i < max; i++) {
-            await mongoConnection.connect();
+            await mongoConnection.connect()
+                .then(() => console.log("Connected to database"))
+                .catch(err => console.error(`Error connecting to database: ${err}`));
+
             const showsFromDB = await mongoConnection.db("series").collection("data").find({}).toArray();
 
             const showNameRaw = await fetchFromAPI("name", i);

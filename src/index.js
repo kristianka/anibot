@@ -46,12 +46,11 @@ for (const file of eventFiles) {
 }
 
 // fetch shows every 5 minutes
-
 function fetchShows() {
     setTimeout(() => {
         watching();
         fetchShows();
-    }, 3000);
+    }, 300000);
 }
 
 fetchShows();
