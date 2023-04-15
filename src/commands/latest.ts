@@ -16,16 +16,16 @@ export default {
 
     async execute(interaction) {
         try {
-            let currentTime = 0;
             const channel = interaction.guild.channels.cache.get(process.env.DEV_CHANNEL_ID);
-
             await interaction.reply({ content: "Fetching, please wait...", ephemeral: true });
+
+            let currentTime: string;
             let convertedMsg = "\n";
             let max = 10;
 
             for (let i = 0; i < max; i++) {
-                const showName = await fetchFromAPI("name", i);
-                const pubTimes = await fetchFromAPI("time", i);
+                const showName: string = (await fetchFromAPI("name", i)).showName;
+                const pubTimes: string[] = (await fetchFromAPI("time", i)).pubTime;
 
                 if (showName.includes("[Batch]")) {
                     console.log("Skipping batch", showName);

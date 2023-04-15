@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import mongodb from "mongodb";
+import { TextChannel, Client } from "discord.js";
 
 const uri = process.env.DB_CONNECTION_STRING;
 
@@ -23,8 +24,8 @@ const mongoConnection = new mongodb.MongoClient(uri, {
 export default async function execute() {
 
     try {
-        const bot = index.Gbot;
-        const channel = bot.channels.cache.get(process.env.RELEASE_CHANNEL_ID);
+        const bot: Client = index.Gbot;
+        const channel: TextChannel = bot.channels.cache.get(process.env.RELEASE_CHANNEL_ID) as TextChannel;
         let max = 3;
 
         for (let i = 0; i < max; i++) {
@@ -32,14 +33,15 @@ export default async function execute() {
                 .then(() => console.log("Connected to database"))
                 .catch(err => console.error(`Error connecting to database: ${err}`));
 
-            const showsFromDB = await mongoConnection.db("series").collection("data").find({}).toArray();
+            const showsFromDB: mongodb.WithId<mongodb.BSON.Document>[] = await mongoConnection.db("series")
+                .collection("data").find({}).toArray();
 
-            const showNameRaw = await fetchFromAPI("name", i);
+            const showNameRaw: string = (await fetchFromAPI("name", i)).showName;
             const showName = showNameRaw.slice(0, -24);
 
             // pubTimes is a string array. 0 is to local date, 1 is to local time and 2 is current local time
-            const pubTimes = await fetchFromAPI("time", i);
-            const releaseId = showNameRaw.slice(0, -6).slice(-8);
+            const pubTimes: string[] = (await fetchFromAPI("time", i)).pubTime;
+            const releaseId: string = showNameRaw.slice(0, -6).slice(-8);
 
             // If a batch release then skip and add one to max amount fetched shows
             if (showName.includes("[Batch]")) {
@@ -47,23 +49,25 @@ export default async function execute() {
                 max += 1;
             } else {
 
-                const showNameWOEpisode = showName.slice(0, -5);
-                const following = showsFromDB.some(e => e.name === showNameWOEpisode);
+                const showNameWOEpisode: string = showName.slice(0, -5);
+                const following: boolean = showsFromDB.some(e => e.name === showNameWOEpisode);
 
                 if (following) {
 
                     // check if showname exists in database, if exists it means that show has been fetched
                     // and sent notification already
-                    const alreadyFetched = showsFromDB.some(obj => obj.latestEpisode === releaseId);
+                    const alreadyFetched: boolean = showsFromDB.some(obj => obj.latestEpisode === releaseId);
 
                     if (!alreadyFetched) {
                         try {
                             console.log("Sending", showName, "to chat at", pubTimes[2]);
                             channel.send(`NEW RELEASE: ${showName} at ${pubTimes[1]}`);
+
                             await mongoConnection.db("series").collection("data").updateOne(
                                 { name: { $eq: showNameWOEpisode } },
                                 { $set: { latestEpisode: releaseId } }
                             );
+
                         } catch (err) {
                             console.error(`Error occured while adding ID to database: ${err}`);
                         }
@@ -80,4 +84,4 @@ export default async function execute() {
     } catch (error) {
         console.log("Error sending message: ", error);
     }
-};
+}

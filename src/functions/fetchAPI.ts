@@ -3,45 +3,64 @@
 /* eslint-disable no-console */
 "use strict";
 
-import { parseString } from "xml2js";
+import { parseString } from 'xml2js';
 
-export default async function execute(type, i) {
-    let jsonData = {};
+interface RssDataInterface {
+    rss: {
+        channel: {
+            item: {
+                title: string,
+                pubDate: string
+            }[]
+        }
+    }
+}
+interface fetchAPIInterface {
+    showName?: string;
+    pubTime?: string[];
+}
 
-    await fetch("https://subsplease.org/rss/?t&r=1080")
-        .then(response => response.text())
+export default async function execute(type: "name" | "time", i: number): Promise<fetchAPIInterface> {
 
-        .then(response => {
-            parseString(response, { explicitArray: false }, (err, result) => {
-                JSON.stringify(result);
-                jsonData = Object.assign({}, result);
-                if (err) {
-                    console.log(err);
-                }
+    async function fetchRssData(): Promise<RssDataInterface | undefined> {
+        try {
+            const response = await fetch("https://subsplease.org/rss/?t&r=1080");
+            const responseText: string = await response.text();
+            const result = await new Promise((resolve, reject) => {
+                parseString(responseText, { explicitArray: false }, (err, result) => {
+                    if (err || !result) {
+                        console.log(err);
+                        reject(err);
+                    }
+                    resolve(result);
+                });
             });
-        })
-
-        .catch(error => {
+            return result as RssDataInterface;
+        } catch (error) {
             console.log("error in api? ", error);
-        });
+            return undefined;
+        }
+    }
 
-    if (type === "name") {
-        let showName: any = JSON.stringify(jsonData.rss.channel.item[i].title);
+    const jsonData: RssDataInterface = await fetchRssData();
+
+    if (jsonData && type === "name") {
+        let showName: string = JSON.stringify(jsonData.rss.channel.item[i].title);
 
         // Clean up the name and timestrings
         showName = showName.toString();
         showName = showName.slice(14);
         console.log(`Showname is ${showName}`);
-        return showName;
+        return { showName };
     }
 
-    if (type === "time") {
+    if (jsonData && type === "time") {
 
         // change these to your local ones
         const timezone = "Europe/Helsinki";
         const timeFormat = "en-FI";
 
-        const pubDayTime = JSON.stringify(jsonData.rss.channel.item[i].pubDate);
+        const pubDayTime: string = JSON.stringify(jsonData.rss.channel.item[i].pubDate);
 
         const currentLocalTime = () => new Date().toLocaleTimeString(timeFormat, { timeZone: timezone });
 
@@ -51,9 +70,9 @@ export default async function execute(type, i) {
         const toLocaleTime = date => new Date(date).toLocaleTimeString(timeFormat,
             { timeZone: timezone, hour: "2-digit", minute: "2-digit", second: "2-digit" });
 
-        const dateArray = [toLocateDate(pubDayTime), toLocaleTime(pubDayTime), currentLocalTime()];
+        const pubTime = [toLocateDate(pubDayTime), toLocaleTime(pubDayTime), currentLocalTime()];
 
-        return dateArray;
+        return { pubTime };
     }
     return null;
-};
+}
