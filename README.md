@@ -73,7 +73,7 @@ Bot sending notification of a new release. Runs every five minutes automatically
 
 ### My timezone or time formatting is wrong!
 
-Modify the these variables in ```fetchAPI.js``` to your liking:
+Modify the these variables in ```functions/fetchAPI.ts``` to your liking:
 ```
 const timezone = "Europe/Helsinki";
 const timeFormat = "en-FI";
