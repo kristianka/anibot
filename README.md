@@ -1,36 +1,48 @@
 # anibot
 Anibot is a discord bot that notifies user of latest releases from their favourite animes. This bot uses discord.js and data is fetched from SubsPlease RSS feed.
 
-Made with node.js using minimal amount of npm modules. 
+Made with TypeScript, MongoDB and NodeJS.
 
 
 ## How to run
 
 - Visit [Discord Developer Portal](https://discord.com/developers/docs/intro) and create a bot. Choose basic permissions, atleast sending messages. Turn on all the Privileged Gateway Intents options inside "Bot" section.
 
-- Clone this repository to your machine.
+- Clone this repository to your machine and run ```npm i``` to install dependencies.
 
 - Create .env file and place your discord tokens there. Example:
+
+
 ```
-DISCORD_TOKEN= "xx"
-CLIENT_ID= "xx"
-GUILD_ID= "xx"
-RELEASE_CHANNEL_ID= "xx" // id of channel where you want bot to notify
-DEV_CHANNEL_ID= "xx" // test channel for /slash commands
+DISCORD_TOKEN= ""
+CLIENT_ID= ""
+GUILD_ID= ""
+RELEASE_CHANNEL_ID= ""
+DEV_CHANNEL_ID= ""
+LOGS_CHANNEL_ID= ""
+DB_CONNECTION_STRING= "" // mongodb connection, see below
 ```
 
 
-- Create a data.json file inside /data/ folder and insert ```[]``` to there. 
+- Create a MongoDB Atlas account and create a cluster that has ```series``` database and ```data``` collection in there. Press connect, select drivers and copy the ```uri``` value. Make sure to modify the ```<password>``` to be your cluster password. 
 
-- Create a shows.json where you list your favourite shows that you want to track. [Here's](https://myanimelist.net/anime/season) a list of  airing shows.
- Example: 
+- You can list your favourite shows that you want to track to the ```data``` collection. [Here's](https://myanimelist.net/anime/season) a list of airing shows. I recommend connecting with MongoDB compass to the datanase. The schema is the following:
+
 ```
-[
-    "Vinland Saga S2",
-    "Mobile Suit Gundam - The Witch from Mercury",
-]
+{
+  "_id": {
+    "$oid": "64396564a26ce63fc6fc90ca"
+  },
+  "name": "Vinland Saga S2",
+  "latestEpisode": ""
+}
 ```
-- In repository run node index.js.
+
+where ```id``` will be generated automatically. You need to create ```name``` and ```latestEpisode``` keys, you can leave ```latestEpisode``` empty. Both are strings.
+
+- Build the files with the command ```tsc```. JavaScript files will be created to ```/dist``` folder.
+
+- Run ```node dist/index.js``` inside the repository.
 
 - Done!
 
@@ -69,12 +81,10 @@ const timeFormat = "en-FI";
 
 ### The bot doesn't work!
 
-Have you:
-- added your credentials to ```.env```
-- created a ```data``` folder where there are two files, ```shows.json``` and ```data.json```
-- added titles to ```shows.json``` and inserted ```[]``` to ```data.json```?
-
-If ```/latest``` works you might have invalid shows in ```shows.json```.
+Have you made sure that:
+- you added the credentials to ```.env```
+- mongodb connection is working
+- mongodb schema is correct?
 
 
 ## Suggestions
