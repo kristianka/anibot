@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist",
+        "allowJs": true,
+        "target": "ESNext",
+        "moduleResolution": "nodenext",
+        "module": "EsNext",
+        "noFallthroughCasesInSwitch": true,
+    },
+    "include": [
+        "./src/**/*"
+    ]
+}
