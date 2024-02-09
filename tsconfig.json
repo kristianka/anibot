@@ -3,11 +3,9 @@
         "outDir": "./dist",
         "allowJs": true,
         "target": "ESNext",
-        "moduleResolution": "nodenext",
-        "module": "EsNext",
-        "noFallthroughCasesInSwitch": true,
+        "moduleResolution": "NodeNext",
+        "module": "NodeNext",
+        "noFallthroughCasesInSwitch": true
     },
-    "include": [
-        "./src/**/*"
-    ]
+    "include": ["./src/**/*"]
 }
