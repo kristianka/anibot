@@ -19,7 +19,7 @@ const mongoConnection = new mongodb.MongoClient(uri, {
 
 export default async function execute() {
     try {
-        const bot: Client = index.Gbot;
+        const bot: Client = index;
         const channel: TextChannel = bot.channels.cache.get(
             process.env.RELEASE_CHANNEL_ID
         ) as TextChannel;

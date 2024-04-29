@@ -4,6 +4,8 @@
   "description": "A discord bot",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -17,16 +19,16 @@
     "xml2js": "^0.5.0"
   },
   "devDependencies": {
-    "@types/node": "^18.15.11",
+    "@types/node": "^18.19.31",
     "@types/xml2js": "^0.4.11",
     "@typescript-eslint/eslint-plugin": "^5.58.0",
     "@typescript-eslint/parser": "^5.58.0",
     "eslint": "^8.38.0",
     "eslint-config-eslint": "^7.0.0",
-    "nodemon": "^3.0.3",
+    "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.0.4"
+    "typescript": "^5.4.5"
   },
   "type": "module"
 }

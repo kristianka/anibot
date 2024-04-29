@@ -57,4 +57,4 @@ const main = async () => {
 
 main();
 // pass client to other files
-export default { Gbot: client };
+export default client;
